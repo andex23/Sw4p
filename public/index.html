@@ -2,42 +2,286 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#000080" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Sw4p v0.1 - A nostalgic cryptocurrency swap application"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <title>Sw4p v0.1 Alpha</title>
+    <!-- Add a classic Windows favicon -->
+    <link rel="icon" href="favicon.ico" />
+    <!-- Custom cursor for nostalgic feel -->
+    <style>
+      @font-face {
+        font-family: 'MS Sans Serif';
+        src: url('https://cdn.jsdelivr.net/npm/98.css@0.1.17/dist/ms_sans_serif.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+      
+      body {
+        cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAANCAMAAACjHN8KAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAflBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAADf39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39////+35YZxAAAAKXRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAClm7h9AAAAAWJLR0QqU77UngAAAAd0SU1FB+YDBgwBCwRt1woAAAAjSURBVAgdY2BgYGBkYmZhZWPn4OTi5uHl4xcQFBIWERUTlwAAGZYA2WPjpksAAAAASUVORK5CYII='), auto;
+      }
+      
+      /* Classic teal desktop background */
+      html {
+        background-color: #008080;
+      }
+      
+      /* Remove margin for full page effect */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'MS Sans Serif', 'Arial', sans-serif;
+        overflow: auto;
+      }
+      
+      /* Loading screen */
+      #loading-screen {
+        background-color: #000080;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      
+      #loading-screen h1 {
+        font-size: 36px;
+        margin-bottom: 50px;
+      }
+      
+      #loading-bar-container {
+        width: 400px;
+        height: 20px;
+        border: 2px solid white;
+        background-color: #000080;
+        position: relative;
+      }
+      
+      #loading-bar {
+        height: 100%;
+        background-color: white;
+        width: 0%;
+        transition: width 3s;
+      }
+      
+      #loading-status {
+        margin-top: 20px;
+        font-size: 14px;
+      }
+      
+      /* Desktop icons */
+      #desktop-icons {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      /* Hide desktop icons on mobile */
+      @media screen and (max-width: 768px) {
+        #desktop-icons {
+          display: none !important;
+        }
+        
+        #taskbar {
+          display: none !important;
+        }
+        
+        body {
+          overflow: auto !important;
+        }
+      }
+      
+      .desktop-icon {
+        width: 60px;
+        text-align: center;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+      
+      .icon-img {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto;
+        background-color: transparent;
+        display: block;
+      }
+      
+      .icon-text {
+        color: white;
+        font-size: 11px;
+        margin-top: 5px;
+        text-shadow: 1px 1px 1px black;
+      }
+      
+      /* Start button and taskbar */
+      #taskbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 28px;
+        background-color: #c0c0c0;
+        border-top: 1px solid #ffffff;
+        display: flex;
+        align-items: center;
+        z-index: 1000;
+      }
+      
+      #start-button {
+        height: 22px;
+        margin-left: 2px;
+        padding: 1px 5px;
+        display: flex;
+        align-items: center;
+        background-color: #c0c0c0;
+        border: 2px outset #d4d0c8;
+        font-weight: bold;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      
+      #start-button:active {
+        border: 2px inset #d4d0c8;
+      }
+      
+      #start-logo {
+        width: 16px;
+        height: 16px;
+        margin-right: 3px;
+      }
+      
+      #taskbar-time {
+        margin-left: auto;
+        margin-right: 10px;
+        border: 1px inset #d4d0c8;
+        padding: 0 5px;
+        font-size: 11px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- Loading screen -->
+    <div id="loading-screen">
+      <h1>Sw4p v0.1</h1>
+      <div id="loading-bar-container">
+        <div id="loading-bar"></div>
+      </div>
+      <div id="loading-status">Initializing...</div>
+    </div>
+    
+    <!-- Desktop icons -->
+    <div id="desktop-icons">
+      <div class="desktop-icon" id="cryptoswap-icon">
+        <img src="/images/swap.png" alt="Sw4p" width="30" />
+        <div class="icon-text">Sw4p</div>
+      </div>
+      <div class="desktop-icon">
+        <img src="/images/computer.png" alt="Computer" width="30" />
+        <div class="icon-text">My Computer</div>
+      </div>
+      <div class="desktop-icon">
+        <img src="/images/folder.png" alt="Folder" width="30" />       
+        <div class="icon-text">Folder</div>
+      </div>
+      <div class="desktop-icon">
+        <img src="/images/recyclebin.png" alt="recyclebin" width="30" />       
+         <div class="icon-text">Recycle Bin</div>
+      </div>
+    </div>
+    
+    <!-- Taskbar -->
+    <div id="taskbar">
+      <button id="start-button">
+        <img id="start-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAAB3RJTUUH5gMGBR0Y0zB7MgAAAedJREFUOMudUz1IHFEUfG92763r3rpeu64/UVBQsLFRRGysBEEwYGUZBdFoF0xhYAUbmxQiElJIChGxSRkQRFEQCwsLBUVBza273tfd+347FppbExB8zYNhZt6bN/MGeFpkj3Eymfzl+36OmVv39/crA7kQous4zjDP8+ZardZQd3f3hwcCpdTneDz+bnNzE5lMpre/vz9ZKpXQ6XRGHcfpbTabH6PRaKC1PslkMqler9fw9vY2CoUCdnd3US6Xkc/nUavVsLu7i6OjI5TLZWxsbIAxhtnZWeRyOayurtYAqIcEvu9jbGwMExMTOD09Rb1e/zcA4ObmBtlsFuPj4+C84RkNf2t0ZGQEiURCHh8fN8PhMFzXxcLCApRSsG3bdF0Xg4ODEEKAMQbLshCJRLC0tARjDIQQMIBpNBqBTqcD27ZFPp/H8vKykFKiUChgamoKUkpwzmGMgdYaWmsQY8A5h+d5OD8/Rzwe/y33H/j8/Byu68Lr68Hm5ttoNBqh6+trGo1GIYRAs9nE4eEBFudmQMYD5wxKSQgheufn5yH27Nm9HxgY+CaE+FOpVN7s7OwE3eAuOOeQUuLi4lec7O/jMvIHyXQPbMcB5xyMMVBKpOPx+BRjbN0YU11bW5sKguBLOBRaZIzdFwoFWrj5jtXqNs7OztDpdNDT0wNjgKurK3R1deHw8HCUMfZcKfX1HwaREGnYuJEXAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIyLTAzLTA2VDA1OjI5OjI0KzAwOjAwBJnCdAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMi0wMy0wNlQwNToyOToyNCswMDowMHXEesQAAAAASUVORK5CYII=" alt="Start">
+        Start
+      </button>
+      <div id="taskbar-time">9:30 AM</div>
+    </div>
+    
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    
+    <script>
+      // Simulate Windows 98/2000 boot sequence
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingStatus = document.getElementById('loading-status');
+        const loadingScreen = document.getElementById('loading-screen');
+        const desktopIcons = document.getElementById('desktop-icons');
+        const taskbar = document.getElementById('taskbar');
+        const cryptoswapIcon = document.getElementById('cryptoswap-icon');
+        const taskbarTime = document.getElementById('taskbar-time');
+        
+        // Update clock
+        function updateClock() {
+          const now = new Date();
+          let hours = now.getHours();
+          const minutes = now.getMinutes().toString().padStart(2, '0');
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          hours = hours % 12;
+          hours = hours ? hours : 12; // Convert 0 to 12
+          taskbarTime.textContent = hours + ':' + minutes + ' ' + ampm;
+        }
+        
+        // Start loading sequence
+        setTimeout(() => {
+          loadingStatus.textContent = "Loading system components...";
+          loadingBar.style.width = "20%";
+        }, 1000);
+        
+        setTimeout(() => {
+          loadingStatus.textContent = "Starting network services...";
+          loadingBar.style.width = "40%";
+        }, 2000);
+        
+        setTimeout(() => {
+          loadingStatus.textContent = "Initializing Sw4p...";
+          loadingBar.style.width = "70%";
+        }, 3000);
+        
+        setTimeout(() => {
+          loadingStatus.textContent = "Starting Windows...";
+          loadingBar.style.width = "100%";
+        }, 4000);
+        
+        // Show desktop
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+          updateClock();
+          setInterval(updateClock, 60000); // Update clock every minute
+        }, 5000);
+        
+        // Launch app when desktop icon is clicked
+        cryptoswapIcon.addEventListener('click', function() {
+          // Auto-start the app
+          const event = new Event('double-click');
+          cryptoswapIcon.dispatchEvent(event);
+        });
+        
+        // Double-click event to launch app
+        cryptoswapIcon.addEventListener('dblclick', function() {
+          // The React application will mount itself to the #root element
+        });
+        
+        // Auto-launch after desktop appears
+        setTimeout(() => {
+          cryptoswapIcon.dispatchEvent(new Event('dblclick'));
+        }, 6000);
+      });
+    </script>
   </body>
 </html>

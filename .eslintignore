@@ -1,0 +1,40 @@
+# Build directories
+build/
+dist/
+coverage/
+
+# Generated files
+src/generated/
+
+# Node modules
+node_modules/
+
+# Compiled files
+*.min.js
+*.bundle.js
+
+# Web Assembly files
+*.wasm
+*.wasm.js
+
+# Service workers
+**/sw.js
+**/workbox-*.js
+
+# Dependencies and vendor files
+public/
+static/
+
+# Log files
+*.log
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 

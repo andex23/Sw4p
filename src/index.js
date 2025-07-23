@@ -1,8 +1,34 @@
+// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+
+// Suppress source map warnings from dependencies
+const originalWarn = console.warn;
+console.warn = function(message) {
+  if (message && typeof message === 'string' && message.includes('Failed to parse source map')) {
+    return;
+  }
+  originalWarn.apply(console, arguments);
+};
+
+// Console banner for the retro feel
+console.log(`
+ ███████╗██╗    ██╗██╗  ██╗██████╗ 
+ ██╔════╝██║    ██║██║  ██║██╔══██╗
+ ███████╗██║ █╗ ██║███████║██████╔╝
+ ╚════██║██║███╗██║╚════██║██╔═══╝ 
+ ███████║╚███╔███╔╝     ██║██║     
+ ╚══════╝ ╚══╝╚══╝      ╚═╝╚═╝     
+                                   
+           v0.1 Alpha               
+     Copyright © 2025 Sw4p Inc.     
+        All Rights Reserved         
+`);
+
+console.log("[Sw4p] Initializing...");
+console.log("[Sw4p] Loading system resources...");
+console.log("[Sw4p] System ready.");
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -10,8 +36,3 @@ root.render(
     <App />
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
